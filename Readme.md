@@ -13,5 +13,10 @@ ansible-playbook 2.10.8
   python version = 3.9.2 (default, Feb 28 2021, 17:03:44) [GCC 10.2.1 20210110]
 ```
 
+**Basic Commands**
+```
+ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
+```
+
 ### References
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-debian-10

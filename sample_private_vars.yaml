@@ -1,0 +1,3 @@
+---
+HOSTNAME: "your-hostname-not-too-critical"
+local_timezone: 'America/New_York'

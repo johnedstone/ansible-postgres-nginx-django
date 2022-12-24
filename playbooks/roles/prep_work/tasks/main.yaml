@@ -1,0 +1,31 @@
+---
+#- name: Check hostame variable
+#  debug:
+#    msg: "hostname: {{ HOSTNAME }}"
+
+- name: setup vimrc
+  copy:
+    src: vimrc
+    dest: "{{ HOME }}/.vimrc"
+
+- name: change hostname
+  become: yes
+  template:
+    src: hostname.j2
+    dest: /etc/hostname
+
+- name: set timezone correctly
+  become: yes
+  file:
+    src: "/usr/share/zoneinfo/{{ local_timezone }}"
+    path: /etc/localtime
+    state: link
+
+- name: install apt packages
+  become: yes
+  apt:
+    name: ["rsync", "nmap", "htop", "python3-virtualenv"]
+    state: present
+    update-cache: yes
+ 
+# vim: ai et ts=2 sw=2 sts=2 nu
