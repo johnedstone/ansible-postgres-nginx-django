@@ -1,0 +1,136 @@
+---
+- name: set up app directory
+  become: yes
+  ansible.builtin.file:
+    path: "{{ path_to_app }}"
+    state: directory
+    mode: '0775'
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+
+- name: install gunicorn hello_world
+  copy:
+    src: hello_world.py
+    dest: "{{ path_to_app }}/hello_world.py"
+
+- name: install gunicorn
+  pip:
+    name: gunicorn
+      #virtualenv_python: "{{ item.value.which_python }}"
+      #virtualenv_command: "{{ item.value.whereis_virtualenv }}"
+    virtualenv: "{{ path_to_app }}/venv"
+
+## Directory created in wp_tasks.yaml.  Could be moved here :)
+#- name: create gunicorn nginx config
+#  become: yes
+#  template:
+#    src: templates/gunicorn.conf.j2
+#    dest: "/opt/bitnami/nginx/conf/server_blocks/{{ item.key }}.conf"
+#    owner: bitnami
+#    group: daemon
+#    mode: '0664'
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart bitnami apps
+#
+#- name: install gunicorn
+#  pip:
+#    name: gunicorn
+#    virtualenv_python: "{{ item.value.which_python }}"
+#    virtualenv_command: "{{ item.value.whereis_virtualenv }}"
+#    virtualenv: "/opt/bitnami/apps/{{ item.key }}/venv"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart bitnami apps
+#
+#- name: install gunicorn hello_world
+#  copy:
+#    src: files/gunicorn/hello_world.py
+#    dest: "/opt/bitnami/apps/{{ item.key }}/hello_world.py"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart bitnami apps
+#
+#- name: Create gunicorn logging directories
+#  become: yes
+#  file:
+#    path: /var/log/gunicorn_{{ item.key }}
+#    owner: bitnami
+#    group: daemon
+#    mode: 0755
+#    state: directory
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#
+#- name: Configure gunicorn sysconfig
+#  become: yes
+#  template:
+#    src: systemd/gunicorn_sysconfig.j2
+#    dest: "/etc/default/gunicorn_{{ item.key }}"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart gunicorn service
+#    - Restart gunicorn socket
+#    - Restart bitnami apps
+#
+#- name: install gunicorn helper.sh for first migration
+#  become: yes
+#  template:
+#    src: gunicorn_helper.sh.j2
+#    dest: "/opt/bitnami/apps/{{ item.key }}/config/helper.sh"
+#    owner: bitnami
+#    group: bitnami
+#    mode: 0440
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#
+#- name: create systemd gunicorn socket file
+#  become: yes
+#  template:
+#    src: templates/systemd/gunicorn_socket.j2
+#    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.socket"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart gunicorn service
+#    - Restart gunicorn socket
+#    - Restart bitnami apps
+#
+#- name: create systemd gunicorn service file
+#  become: yes
+#  template:
+#    src: templates/systemd/gunicorn_service.j2
+#    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.service"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#  notify:
+#    - Restart gunicorn service
+#    - Restart gunicorn socket
+#    - Restart bitnami apps
+#
+#- name: gunicorn enable & start
+#  become: yes
+#  service:
+#    name: "gunicorn_{{ item.key }}"
+#    enabled: yes
+#    state: started
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#
+## https://bitbucket.org/johnedstone-for-sure/nas-home-dir-oidc/src/master/rest_api/playbooks/nas_home_dir_restapi/roles/nginx_rest_api/templates/prod_settings.py.j2
+#
+#- name: Enable logrotate gunicorn apps
+#  become: yes
+#  template:
+#    src: logrotate.j2
+#    dest: "/etc/logrotate.d/gunicorn_{{ item.key }}"
+#  loop: "{{ APPs | dict2items }}"
+#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
+#
+#
+#
+# vim: ai et ts=2 sw=2 sts=2 nu

@@ -2,6 +2,7 @@
 - hosts: nginx_hosts
   vars:
     HOME: "{{ lookup('env', 'HOME') }}"
+    USER: "{{ lookup('env', 'USER') }}"
   vars_files:
     - "{{ HOME }}/configuration/private_vars.yaml"
   connection: local
@@ -10,5 +11,7 @@
       tags: [prep-work]
     - role: postgres
       tags: [postgres]
+    - role: gunicorn_setup
+      tags: [gunicorn-setup]
 
 # vim: ai et ts=2 sw=2 sts=2 nu
