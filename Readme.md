@@ -1,6 +1,11 @@
 ### Description
 Playbook to install postgres, nginx and django on ec2 debian instance
 
+### Prerequisites
+* install ansible and git
+* Change locale to en_us.UTF-8 `sudo dpkg-reconfigure locales`
+* reboot 
+
 ### Ansible notes
 **Version**
 ```
@@ -14,6 +19,16 @@ ansible-playbook 2.10.8
 ```
 
 **Basic Commands**
+```
+ansible-galaxy collection install community.postgresql
+```
+
+For the first time play the tags singularly, in order.
+```
+ansible-playbook --check --tags prep-work --flush-cache -i inventory.ini playbook.yaml
+```
+
+Lastly, then one can run this:
 ```
 ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ```

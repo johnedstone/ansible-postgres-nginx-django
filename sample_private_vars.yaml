@@ -1,3 +1,6 @@
 ---
 HOSTNAME: "your-hostname-not-too-critical"
-local_timezone: 'America/New_York'
+local_timezone: "America/New_York"
+db_name: "db_name"
+db_user: "my_user"
+db_password: "my_password"
