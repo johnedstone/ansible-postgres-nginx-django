@@ -1,0 +1,24 @@
+[Unit]
+Description=gunicorn {{ app_name }} daemon
+Requires=gunicorn_{{ app_name }}.socket
+After=network.target
+
+[Service]
+Type=notify
+User={{ USER }}
+Group={{ USER }}
+WorkingDirectory={{ path_to_app }}
+
+ExecStart={{ path_to_app }}/venv/bin/gunicorn \
+    --access-logfile /var/log/gunicorn_{{ app_name }}/access.log \
+    --error-logfile /var/log/gunicorn_{{ app_name }}/error.log \
+          --workers {{ number_of_gunicorn_workers }} \
+          {{ gunicorn_app }}
+
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

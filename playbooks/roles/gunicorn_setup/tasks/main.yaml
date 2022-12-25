@@ -34,65 +34,51 @@
   template:
     src: logrotate.j2
     dest: "/etc/logrotate.d/gunicorn_{{ app_name }}"
-#
-#- name: Configure gunicorn sysconfig
-#  become: yes
-#  template:
-#    src: systemd/gunicorn_sysconfig.j2
-#    dest: "/etc/default/gunicorn_{{ item.key }}"
-#  loop: "{{ APPs | dict2items }}"
-#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-#  notify:
-#    - Restart gunicorn service
-#    - Restart gunicorn socket
-#    - Restart bitnami apps
-#
-#- name: install gunicorn helper.sh for first migration
-#  become: yes
-#  template:
-#    src: gunicorn_helper.sh.j2
-#    dest: "/opt/bitnami/apps/{{ item.key }}/config/helper.sh"
-#    owner: bitnami
-#    group: bitnami
-#    mode: 0440
-#  loop: "{{ APPs | dict2items }}"
-#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-#
-#- name: create systemd gunicorn socket file
-#  become: yes
-#  template:
-#    src: templates/systemd/gunicorn_socket.j2
-#    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.socket"
-#  loop: "{{ APPs | dict2items }}"
-#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-#  notify:
-#    - Restart gunicorn service
-#    - Restart gunicorn socket
-#    - Restart bitnami apps
-#
-#- name: create systemd gunicorn service file
-#  become: yes
-#  template:
-#    src: templates/systemd/gunicorn_service.j2
-#    dest: "/usr/lib/systemd/system/gunicorn_{{ item.key }}.service"
-#  loop: "{{ APPs | dict2items }}"
-#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-#  notify:
-#    - Restart gunicorn service
-#    - Restart gunicorn socket
-#    - Restart bitnami apps
-#
-#- name: gunicorn enable & start
-#  become: yes
-#  service:
-#    name: "gunicorn_{{ item.key }}"
-#    enabled: yes
-#    state: started
-#  loop: "{{ APPs | dict2items }}"
-#  when: item.value.using_gunicorn is defined and item.value.using_gunicorn
-#
-## https://bitbucket.org/johnedstone-for-sure/nas-home-dir-oidc/src/master/rest_api/playbooks/nas_home_dir_restapi/roles/nginx_rest_api/templates/prod_settings.py.j2
-#
-#
-#
+
+- name: "create systemd gunicorn {{ app_name }} socket file"
+  become: yes
+  template:
+    src: templates/systemd/gunicorn_socket.j2
+    dest: "/usr/lib/systemd/system/gunicorn_{{ app_name }}.socket"
+  notify:
+    - "restart gunicorn {{ app_name }} service"
+    - "restart gunicorn {{ app_name }} socket"
+
+- name: "create systemd gunicorn {{ app_name }} service file"
+  become: yes
+  template:
+    src: templates/systemd/gunicorn_service.j2
+    dest: "/usr/lib/systemd/system/gunicorn_{{ app_name }}.service"
+  notify:
+    - "restart gunicorn service"
+    - "restart gunicorn socket"
+
+- name: "gunicorn {{ app_name }} enable & start"
+  become: yes
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - "gunicorn_{{ app_name }}.service"
+    - "gunicorn_{{ app_name }}.socket"
+  notify:
+    - "restart gunicorn service"
+    - "restart gunicorn socket"
+
+- name: curl gunicorn socket
+  command:
+    cmd: "curl -GET --unix-socket /run/gunicorn_{{ app_name }}/{{ app_name }}.sock http://localhost/"
+    warn: false
+  register: curl_hello_world
+  changed_when: False
+  when: not ansible_check_mode
+
+- name: debug curl hello_world
+  debug:
+    var: curl_hello_world.stdout
+  changed_when: False
+  when: not ansible_check_mode
+
+
 # vim: ai et ts=2 sw=2 sts=2 nu

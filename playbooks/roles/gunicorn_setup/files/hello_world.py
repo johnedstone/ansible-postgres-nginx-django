@@ -1,5 +1,6 @@
-"""
-https://gunicorn.org/
+""" https://gunicorn.org/
+
+gunicorn --bind 0.0.0.0:8080 hello_world:app
 """
 def app(environ, start_response):
     data = b"Hello, World!\n"
