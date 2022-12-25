@@ -20,6 +20,12 @@
     path: /etc/hosts
     line: "127.0.0.1 {{ HOSTNAME }}"
     create: yes
+- name: release cloud cfg from managing /etc/hosts
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/cloud/cloud.cfg.d/01_debian_cloud.cfg
+    regexp: "^manage_etc_hosts:"
+    line: "manage_etc_hosts: false"
 
 - name: set timezone correctly
   become: yes
