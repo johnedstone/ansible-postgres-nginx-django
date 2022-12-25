@@ -14,6 +14,13 @@
     src: hostname.j2
     dest: /etc/hostname
 
+- name: add hostname to /etc/hosts
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "127.0.0.1 {{ HOSTNAME }}"
+    create: yes
+
 - name: set timezone correctly
   become: yes
   file:
