@@ -66,6 +66,7 @@
     - "restart gunicorn service"
     - "restart gunicorn socket"
 
+# "curl -GET --unix-socket /run/gunicorn_{{ app_name }}/{{ app_name}}.sock localhost"
 - name: curl gunicorn socket
   command:
     cmd: "curl -GET --unix-socket /run/gunicorn_{{ app_name }}/{{ app_name }}.sock http://localhost/"
