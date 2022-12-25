@@ -32,7 +32,7 @@ ansible-playbook 2.10.8
 ansible-galaxy collection install community.postgresql
 ```
 
-For the first time play the tags singularly, in order.
+For the first time 'check' and then 'play' the tags singularly, in order.
 ```
 ansible-playbook --check --tags prep-work --flush-cache -i inventory.ini playbook.yaml
 ansible-playbook --check --tags postgres-work --flush-cache -i inventory.ini playbook.yaml

@@ -1,0 +1,14 @@
+/var/log/gunicorn_{{ app_name }}/*.log {
+    weekly
+    missingok
+    rotate 5
+    compress
+    notifempty
+    "create 0660 {{ USER }} {{ USER }}"
+    sharedscripts
+    postrotate
+       /usr/bin/systemctl restart gunicorn_{{ app_name }}.service
+       /usr/bin/systemctl restart gunicorn_{{ app_name }}.socket
+endscript
+}
+
