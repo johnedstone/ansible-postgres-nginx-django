@@ -41,8 +41,8 @@
     src: templates/systemd/gunicorn_socket.j2
     dest: "/usr/lib/systemd/system/gunicorn_{{ app_name }}.socket"
   notify:
-    - "restart gunicorn {{ app_name }} service"
-    - "restart gunicorn {{ app_name }} socket"
+    - "restart gunicorn service"
+    - "restart gunicorn socket"
 
 - name: "create systemd gunicorn {{ app_name }} service file"
   become: yes
@@ -65,6 +65,7 @@
   notify:
     - "restart gunicorn service"
     - "restart gunicorn socket"
+  when: not ansible_check_mode
 
 # "curl -GET --unix-socket /run/gunicorn_{{ app_name }}/{{ app_name}}.sock localhost"
 - name: curl gunicorn socket
