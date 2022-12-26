@@ -37,7 +37,7 @@
 - name: install apt packages
   become: yes
   apt:
-    name: ["rsync", "nmap", "htop", "python3-virtualenv", "python3-psycopg2", "libpq-dev", "acl"]
+    name: ["rsync", "nmap", "htop", "python3-virtualenv", "python3-psycopg2", "libpq-dev", "acl", "postgresql", "nginx"]
     state: present
     update-cache: yes
  
