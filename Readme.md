@@ -37,6 +37,7 @@ For the first time 'check' and then 'play' the tags singularly, in order.
 ansible-playbook --check --tags prep-work --flush-cache -i inventory.ini playbook.yaml
 ansible-playbook --check --tags postgres-work --flush-cache -i inventory.ini playbook.yaml
 ansible-playbook --check --tags gunicorn-setup --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --tags nginx-setup  --flush-cache -i inventory.ini playbook.yaml
 ```
 
 Lastly, then one can run this:
