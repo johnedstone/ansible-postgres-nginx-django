@@ -1,17 +1,17 @@
 [Unit]
-Description=gunicorn {{ app_name }} daemon
-Requires=gunicorn_{{ app_name }}.socket
+Description=gunicorn {{ website_name }} daemon
+Requires=gunicorn_{{ website_name }}.socket
 After=network.target
 
 [Service]
 Type=notify
 User={{ USER }}
 Group={{ USER }}
-WorkingDirectory={{ path_to_app }}
+WorkingDirectory={{ path_to_app_parent }}/{{ website_name }}
 
-ExecStart={{ path_to_app }}/venv/bin/gunicorn \
-    --access-logfile /var/log/gunicorn_{{ app_name }}/access.log \
-    --error-logfile /var/log/gunicorn_{{ app_name }}/error.log \
+ExecStart={{ path_to_app_parent }}/{{ website_name }}/venv/bin/gunicorn \
+    --access-logfile /var/log/gunicorn_{{ website_name }}/access.log \
+    --error-logfile /var/log/gunicorn_{{ website_name }}/error.log \
           --workers {{ number_of_gunicorn_workers }} \
           {{ gunicorn_app }}
 

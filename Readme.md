@@ -27,16 +27,22 @@ ansible-playbook 2.10.8
   python version = 3.9.2 (default, Feb 28 2021, 17:03:44) [GCC 10.2.1 20210110]
 ```
 
-**Basic Commands**
-```
-ansible-galaxy collection install community.postgresql
-```
-
+### Ansible playbooks
 For the first time 'check' and then 'play' the tags singularly, in order.
 ```
 ansible-playbook --check --tags prep-work --flush-cache -i inventory.ini playbook.yaml
-ansible-playbook --check --tags postgres-work --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --tags postgres --flush-cache -i inventory.ini playbook.yaml
 ansible-playbook --check --tags gunicorn-setup --flush-cache -i inventory.ini playbook.yaml
+```
+
+Play the `letsencrypt` tag with the variable `install_lego: true` just the first time,  
+then, set `install_lego: false`
+```
+ansible-playbook --check --tags letsencrypt  --flush-cache -i inventory.ini playbook.yaml
+```
+
+Then, continue on ...
+```
 ansible-playbook --check --tags nginx-setup  --flush-cache -i inventory.ini playbook.yaml
 ```
 
@@ -48,3 +54,4 @@ ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ### References
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-debian-10
 * https://docs.gunicorn.org/en/stable/deploy.html
+* https://github.com/johnedstone/bitnami-wordpress-migration

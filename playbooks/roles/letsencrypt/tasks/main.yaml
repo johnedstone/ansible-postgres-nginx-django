@@ -1,0 +1,69 @@
+---
+- name: create letsencrypt directory
+  become: yes
+  file:
+    state: directory
+    path: "{{ path_to_app_parent }}/letsencrypt"
+    mode: "0750"
+    owner: root
+    group: root
+  when: install_lego
+
+- name: create certificate directory
+  become: yes
+  file:
+    state: directory
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates"
+    mode: "0700"
+    owner: root
+    group: root
+  when: install_lego
+
+- name: "Check if {{ path_to_app_parent }}/letsencrypt/certificates"
+  become: yes
+  stat:
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates"
+  register: certificates_dir
+
+- name: remove tmp lego glob files
+  become: yes
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_fileglob:
+    - '/tmp/lego*'
+  when: install_lego
+
+- name: install lego binary if it does not exist
+  become: yes
+  script: "scripts/install_lego.sh {{ path_to_app_parent }}"
+  args:
+    creates: "{{ path_to_app_parent }}letsencrypt/lego"
+  when: install_lego
+
+- name: install lego cron renew
+  cron:
+    name: "{{ website_name }} lego renew"
+    hour: "{{ lego_cron_hour }}"
+    minute: "{{ lego_cron_min }}"
+    weekday: "{{ lego_cron_weekday }}"
+    job: "sudo {{ path_to_app_parent }}/letsencrypt/lego --path {{ path_to_app_parent }}/letsencrypt --http --http.webroot {{ path_to_app_parent }}/acme_validation --domains {{ website_name }}  --email '{{ lego_email }}' renew --preferred-chain 'ISRG Root X1' --renew-hook '/usr/sbin/nginx -s reload' >/dev/null 2>&1"
+    state: present
+    disabled: "{{ lego_cron_disable }}"
+
+- name: Create server private key (RSA, 4096 bits)
+  become: yes
+  community.crypto.openssl_privatekey:
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.key"
+  when: certificates_dir.stat.exists
+
+- name: Create simple server self-signed certificate
+  become: yes
+  community.crypto.x509_certificate:
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.pem"
+    privatekey_path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.key"
+    provider: selfsigned
+  when: install_lego
+  when: certificates_dir.stat.exists
+ 
+# vim: ai et ts=2 sw=2 sts=2 nu

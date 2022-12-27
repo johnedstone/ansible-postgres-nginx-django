@@ -1,14 +1,23 @@
 ---
 # Not using hostname
-HOSTNAME: my-hostname
+#HOSTNAME: my-hostname
 local_timezone: America/New_York
 db_name: my_django
 db_user: my_user
 db_password: my_password
-path_to_app: /opt/app/my_app
-app_name: my_app_name
+path_to_app_parent: /opt/app
 
 # (2x$num_cores)+1 https://docs.gunicorn.org/en/stable/design.html
 number_of_gunicorn_workers: 5
-
 gunicorn_app: 'hello_world:app'
+website_name: my-website.com
+
+# Only need to do once, install lego
+install_lego: true
+lego_cron_hour: "2"
+lego_cron_min: "10"
+lego_cron_weekday: "2"
+lego_cron_disable: false
+lego_email: my_email@my_email.com
+
+# vim: ai et ts=4 sw=4 sts=4 nu
