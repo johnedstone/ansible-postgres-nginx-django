@@ -1,4 +1,5 @@
 ---
+# Not using hostname
 HOSTNAME: my-hostname
 local_timezone: America/New_York
 db_name: my_django

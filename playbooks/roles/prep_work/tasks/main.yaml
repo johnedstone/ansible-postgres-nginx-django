@@ -8,24 +8,25 @@
     src: vimrc
     dest: "{{ HOME }}/.vimrc"
 
-- name: change hostname
-  become: yes
-  template:
-    src: hostname.j2
-    dest: /etc/hostname
-
-- name: add hostname to /etc/hosts
-  become: yes
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    line: "127.0.0.1 {{ HOSTNAME }}"
-    create: yes
-- name: release cloud cfg from managing /etc/hosts
-  become: yes
-  ansible.builtin.lineinfile:
-    path: /etc/cloud/cloud.cfg.d/01_debian_cloud.cfg
-    regexp: "^manage_etc_hosts:"
-    line: "manage_etc_hosts: false"
+#- name: change hostname
+#  become: yes
+#  template:
+#    src: hostname.j2
+#    dest: /etc/hostname
+#
+#- name: add hostname to /etc/hosts
+#  become: yes
+#  ansible.builtin.lineinfile:
+#    path: /etc/hosts
+#    line: "127.0.0.1 {{ HOSTNAME }}"
+#    create: yes
+#
+#- name: release cloud cfg from managing /etc/hosts
+#  become: yes
+#  ansible.builtin.lineinfile:
+#    path: /etc/cloud/cloud.cfg.d/01_debian_cloud.cfg
+#    regexp: "^manage_etc_hosts:"
+#    line: "manage_etc_hosts: false"
 
 - name: set timezone correctly
   become: yes
