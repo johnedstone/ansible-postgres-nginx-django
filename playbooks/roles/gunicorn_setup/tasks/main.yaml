@@ -2,7 +2,7 @@
 - name: set up app directory
   become: yes
   ansible.builtin.file:
-    path: "{{ path_to_app_parent }}/{{ website_name }}"
+    path: "{{ path_to_app_parent }}/{{ website_domain_name }}"
     state: directory
     mode: 0775
     owner: "{{ USER }}"
@@ -11,19 +11,19 @@
 - name: install gunicorn hello_world
   copy:
     src: hello_world.py
-    dest: "{{ path_to_app_parent }}/{{ website_name }}/hello_world.py"
+    dest: "{{ path_to_app_parent }}/{{ website_domain_name }}/hello_world.py"
 
 - name: install gunicorn
   pip:
     name: gunicorn
       #virtualenv_python: "{{ item.value.which_python }}"
       #virtualenv_command: "{{ item.value.whereis_virtualenv }}"
-    virtualenv: "{{ path_to_app_parent }}/{{ website_name }}/venv"
+    virtualenv: "{{ path_to_app_parent }}/{{ website_domain_name }}/venv"
 
 - name: Create gunicorn logging directories
   become: yes
   file:
-    path: "/var/log/gunicorn_{{ website_name }}"
+    path: "/var/log/gunicorn_{{ website_domain_name }}"
     state: directory
     mode: 0775
     owner: "{{ USER }}"
@@ -33,44 +33,44 @@
   become: yes
   template:
     src: logrotate.j2
-    dest: "/etc/logrotate.d/gunicorn_{{ website_name }}"
+    dest: "/etc/logrotate.d/gunicorn_{{ website_domain_name }}"
 
-- name: "create systemd gunicorn {{ website_name }} socket file"
+- name: "create systemd gunicorn {{ website_domain_name }} socket file"
   become: yes
   template:
     src: templates/systemd/gunicorn_socket.j2
-    dest: "/usr/lib/systemd/system/gunicorn_{{ website_name }}.socket"
+    dest: "/usr/lib/systemd/system/gunicorn_{{ website_domain_name }}.socket"
   notify:
     - "restart gunicorn service"
     - "restart gunicorn socket"
 
-- name: "create systemd gunicorn {{ website_name }} service file"
+- name: "create systemd gunicorn {{ website_domain_name }} service file"
   become: yes
   template:
     src: templates/systemd/gunicorn_service.j2
-    dest: "/usr/lib/systemd/system/gunicorn_{{ website_name }}.service"
+    dest: "/usr/lib/systemd/system/gunicorn_{{ website_domain_name }}.service"
   notify:
     - "restart gunicorn service"
     - "restart gunicorn socket"
 
-- name: "gunicorn {{ website_name }} enable & start"
+- name: "gunicorn {{ website_domain_name }} enable & start"
   become: yes
   service:
     name: "{{ item }}"
     enabled: yes
     state: started
   loop:
-    - "gunicorn_{{ website_name }}.service"
-    - "gunicorn_{{ website_name }}.socket"
+    - "gunicorn_{{ website_domain_name }}.service"
+    - "gunicorn_{{ website_domain_name }}.socket"
   notify:
     - "restart gunicorn service"
     - "restart gunicorn socket"
   when: not ansible_check_mode
 
-# "curl -GET --unix-socket /run/gunicorn_{{ website_name }}/{{ website_name}}.sock localhost"
+# "curl -GET --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name}}.sock localhost"
 - name: curl gunicorn socket
   command:
-    cmd: "curl -GET --unix-socket /run/gunicorn_{{ website_name }}/{{ website_name }}.sock http://localhost/"
+    cmd: "curl -GET --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock http://localhost/"
     warn: false
   register: curl_hello_world
   changed_when: False

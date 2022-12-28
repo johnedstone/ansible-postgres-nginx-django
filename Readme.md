@@ -36,17 +36,28 @@ ansible-playbook --check --tags gunicorn-setup --flush-cache -i inventory.ini pl
 ```
 
 Play the `letsencrypt` tag with the variable `install_lego: true` just the first time,  
-then, set `install_lego: false`
 ```
 ansible-playbook --check --tags letsencrypt  --flush-cache -i inventory.ini playbook.yaml
 ```
+then, set `install_lego: false`
 
-Then, continue on ...
+Continue on with `use_lets_encrypt: false` ...
 ```
 ansible-playbook --check --tags nginx-setup  --flush-cache -i inventory.ini playbook.yaml
 ```
 
-Lastly, then one can run this:
+After starting nginx with the self-signed certs,  
+install certs from Let's Encypt similar to this example:
+```
+sudo /opt/apps/letsencrypt/lego --path /opt/apps/letsencrypt --http --http.webroot /opt/apps/acme_validation --domains "my-website.com"  --email 'my-email@my_email.com' run --preferred-chain 'ISRG Root X1'
+```
+
+And finally, set `use_lets_encrypt: true` and run again ..
+```
+ansible-playbook --diff --check --tags nginx-setup  --flush-cache -i inventory.ini playbook.yaml
+```
+
+Lastly, then one can run this to verify all is well:
 ```
 ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ```

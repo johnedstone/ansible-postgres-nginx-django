@@ -9,6 +9,16 @@
     group: root
   when: install_lego
 
+- name: create acme_validation directory
+  become: yes
+  file:
+    state: directory
+    path: "{{ path_to_app_parent }}/acme_validation"
+    mode: "0755"
+    owner: root
+    group: root
+  when: install_lego
+
 - name: create certificate directory
   become: yes
   file:
@@ -43,25 +53,25 @@
 
 - name: install lego cron renew
   cron:
-    name: "{{ website_name }} lego renew"
+    name: "{{ website_domain_name }} lego renew"
     hour: "{{ lego_cron_hour }}"
     minute: "{{ lego_cron_min }}"
     weekday: "{{ lego_cron_weekday }}"
-    job: "sudo {{ path_to_app_parent }}/letsencrypt/lego --path {{ path_to_app_parent }}/letsencrypt --http --http.webroot {{ path_to_app_parent }}/acme_validation --domains {{ website_name }}  --email '{{ lego_email }}' renew --preferred-chain 'ISRG Root X1' --renew-hook '/usr/sbin/nginx -s reload' >/dev/null 2>&1"
+    job: "sudo {{ path_to_app_parent }}/letsencrypt/lego --path {{ path_to_app_parent }}/letsencrypt --http --http.webroot {{ path_to_app_parent }}/acme_validation --domains {{ website_domain_name }}  --email '{{ lego_email }}' renew --preferred-chain 'ISRG Root X1' --renew-hook '/usr/sbin/nginx -s reload' >/dev/null 2>&1"
     state: present
     disabled: "{{ lego_cron_disable }}"
 
 - name: Create server private key (RSA, 4096 bits)
   become: yes
   community.crypto.openssl_privatekey:
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.key"
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.key"
   when: certificates_dir.stat.exists
 
 - name: Create simple server self-signed certificate
   become: yes
   community.crypto.x509_certificate:
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.pem"
-    privatekey_path: "{{ path_to_app_parent }}/letsencrypt/certificates/server_certificate.key"
+    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.pem"
+    privatekey_path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.key"
     provider: selfsigned
   when: install_lego
   when: certificates_dir.stat.exists
