@@ -14,6 +14,7 @@ website_domain_name: my-website.com
 
 # Only need to do once, install lego
 install_lego: true
+
 lego_cron_hour: "2"
 lego_cron_min: "10"
 lego_cron_weekday: "2"
