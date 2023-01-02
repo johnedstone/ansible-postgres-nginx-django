@@ -16,8 +16,6 @@
 - name: install gunicorn
   pip:
     name: gunicorn
-      #virtualenv_python: "{{ item.value.which_python }}"
-      #virtualenv_command: "{{ item.value.whereis_virtualenv }}"
     virtualenv: "{{ path_to_app_parent }}/{{ website_domain_name }}/venv"
 
 - name: Create gunicorn logging directories
