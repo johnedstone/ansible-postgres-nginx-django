@@ -61,6 +61,11 @@ Lastly, then one can run this to verify all is well:
 ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ```
 
+### Postgres cli
+```
+sudo -u postgres psql
+```
+
 ### References
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-debian-10
 * https://docs.gunicorn.org/en/stable/deploy.html

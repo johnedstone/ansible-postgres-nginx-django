@@ -33,10 +33,11 @@
   become: yes
   community.postgresql.postgresql_query:
     query: "{{ item }}"
+    db: postgres
   loop:
     - "ALTER ROLE {{ db_user }} SET client_encoding TO 'utf8'"
     - "ALTER ROLE {{ db_user }} SET default_transaction_isolation TO 'read committed'"
-    - "ALTER ROLE {{ db_user }} SET timezone TO '{{ local_timezone }}'" 
+    - "ALTER ROLE {{ db_user }} SET timezone TO '{{ LOCAL_TIMEZONE }}'" 
     - "Select * from pg_user"
   register: alter_msg
   when: not ansible_check_mode
@@ -46,3 +47,5 @@
   debug:
     msg: "{{ alter_msg }}"
   changed_when: False
+
+# vim: ai et ts=2 sw=2 sts=2 nu
