@@ -1,5 +1,4 @@
 ---
-# Not using hostname
 HOSTNAME: my-hostname
 FQDN: my-hostname.mydomain.com
 LOCAL_TIMEZONE: America/New_York

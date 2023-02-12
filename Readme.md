@@ -2,7 +2,7 @@
 Playbook to install postgres, nginx and Django on ec2 Debian instance 
 
 ### Prerequisites
-* install ansible and git
+* install ansible, rsync and git
 * Change locale to en_us.UTF-8 `sudo dpkg-reconfigure locales`
 * reboot 
 ```
