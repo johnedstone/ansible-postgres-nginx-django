@@ -1,5 +1,5 @@
 ---
-- name: "restart gunicorn socket"
+- name: "Restart gunicorn socket"
   become: yes
   listen: "Restart gunicorn socket"
   service:
@@ -8,11 +8,20 @@
     daemon_reload: yes
   when: not ansible_check_mode
 
-- name: "restart gunicorn service"
+- name: "Restart gunicorn service"
   become: yes
   listen: "Restart gunicorn service"
   service:
     name: "gunicorn_{{ website_domain_name }}.service"
+    state: restarted
+    daemon_reload: yes
+  when: not ansible_check_mode
+
+- name: "Restart nginx"
+  become: yes
+  listen: "Restart nginx"
+  service:
+    name: "nginx.service"
     state: restarted
     daemon_reload: yes
   when: not ansible_check_mode

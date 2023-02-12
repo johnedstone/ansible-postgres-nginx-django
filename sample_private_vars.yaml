@@ -22,5 +22,6 @@ lego_cron_disable: false
 lego_email: my_email@my_email.com
 
 use_lets_encrypt: false
+path_to_acme_validation: /parent/path/to/acme_validation
 
 # vim: ai et ts=4 sw=4 sts=4 nu

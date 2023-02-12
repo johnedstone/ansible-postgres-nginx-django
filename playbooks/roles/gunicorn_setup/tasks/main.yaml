@@ -65,10 +65,10 @@
     - "restart gunicorn socket"
   when: not ansible_check_mode
 
-# "curl -GET --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name}}.sock localhost"
+# "curl --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name}}.sock localhost"
 - name: curl gunicorn socket
   command:
-    cmd: "curl -GET --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock http://localhost/"
+    cmd: "curl --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock http://localhost/"
     warn: false
   register: curl_hello_world
   changed_when: False
@@ -80,5 +80,40 @@
   changed_when: False
   when: not ansible_check_mode
 
+- name: remove default nginx enable site
+  become: yes
+  notify: Restart nginx
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default 
+
+- name: Add nginx config to sites available
+  become: yes
+  notify: Restart nginx
+  template:
+    dest: /etc/nginx/sites-available/{{ website_domain_name }}
+    src: nginx_conf.j2
+
+- name: Enable nginx config
+  become: yes
+  notify: Restart nginx
+  file:
+    state: link
+    src: /etc/nginx/sites-available/{{ website_domain_name }}
+    dest: /etc/nginx/sites-enabled/{{ website_domain_name }}
+
+- name: curl nginx
+  command:
+    cmd: "curl -H 'Host: {{ website_domain_name }}' http://0.0.0.0"
+    warn: false
+  register: curl_nginx
+  changed_when: False
+  when: not ansible_check_mode
+
+- name: debug curl nginx
+  debug:
+    var: curl_nginx.stdout
+  changed_when: False
+  when: not ansible_check_mode
 
 # vim: ai et ts=2 sw=2 sts=2 nu

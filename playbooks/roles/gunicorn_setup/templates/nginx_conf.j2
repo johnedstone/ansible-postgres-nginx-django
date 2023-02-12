@@ -1,0 +1,75 @@
+server {
+    server_name {{ website_domain_name }};
+    root {{ path_to_app_parent }};
+
+    listen 80;
+
+    location ^~ /.well-known {
+        allow all;
+        root {{ path_to_acme_validation }};
+    }
+
+# Let's let django do the redirection
+#    location / {
+#        return 301 https://$host$request_uri;
+#    }
+
+# if we are going to let django deal with port 80, in some cases
+# then we need this, following ...
+
+    location = /static/favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+    # https://docs.gunicorn.org/en/latest/deploy.html
+    keepalive_timeout 5;
+
+    location / {
+      # checks for static file, if not found proxy to app
+      try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_pass http://unix:/var/run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock;
+    }
+
+}
+{% if use_lets_encrpt is defined and use_lets_encrpt|length %}
+server {
+
+    listen 443 ssl;
+    server_name {{ website_domain_name }};
+    root {{ path_to_app_parent }};
+
+    ssl_certificate      bitnami/certs/{{ website_domain_name }}.crt;
+    ssl_certificate_key  bitnami/certs/{{ website_domain_name }}.key;
+
+    location = /static/favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+    # https://docs.gunicorn.org/en/latest/deploy.html
+    keepalive_timeout 5;
+
+    location / {
+      # checks for static file, if not found proxy to app
+      try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_pass http://unix:/var/run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock;
+    }
+}
+{% endif %}
+
+# vim: ai et ts=4 sw=4 sts=4 nu
