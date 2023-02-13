@@ -3,7 +3,7 @@
   become: yes
   file:
     state: directory
-    path: "{{ path_to_app_parent }}/letsencrypt"
+    path: "{{ path_to_letsencrypt }}"
     mode: "0750"
     owner: root
     group: root
@@ -13,7 +13,7 @@
   become: yes
   file:
     state: directory
-    path: "{{ path_to_app_parent }}/acme_validation"
+    path: "{{ path_to_acme_validation }}"
     mode: "0755"
     owner: root
     group: root
@@ -23,16 +23,16 @@
   become: yes
   file:
     state: directory
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates"
+    path: "{{ path_to_letsencrypt }}/certificates"
     mode: "0700"
     owner: root
     group: root
   when: install_lego
 
-- name: "Check if {{ path_to_app_parent }}/letsencrypt/certificates"
+- name: "Check if {{ path_to_letsencrypt }}/certificates"
   become: yes
   stat:
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates"
+    path: "{{ path_to_letsencrypt }}/certificates"
   register: certificates_dir
 
 - name: remove tmp lego glob files
@@ -46,9 +46,9 @@
 
 - name: install lego binary if it does not exist
   become: yes
-  script: "scripts/install_lego.sh {{ path_to_app_parent }}"
+  script: "scripts/install_lego.sh {{ path_to_letsencrypt }}"
   args:
-    creates: "{{ path_to_app_parent }}letsencrypt/lego"
+    creates: "{{ path_to_letsencrypt }}/lego"
   when: install_lego
 
 - name: install lego cron renew
@@ -57,21 +57,21 @@
     hour: "{{ lego_cron_hour }}"
     minute: "{{ lego_cron_min }}"
     weekday: "{{ lego_cron_weekday }}"
-    job: "sudo {{ path_to_app_parent }}/letsencrypt/lego --path {{ path_to_app_parent }}/letsencrypt --http --http.webroot {{ path_to_app_parent }}/acme_validation --domains {{ website_domain_name }}  --email '{{ lego_email }}' renew --preferred-chain 'ISRG Root X1' --renew-hook '/usr/sbin/nginx -s reload' >/dev/null 2>&1"
+    job: "sudo {{ path_to_letsencrypt }}/lego --path {{ path_to_letsencrypt }} --http --http.webroot {{ path_to_acme_validation }} --domains {{ website_domain_name }}  --email '{{ lego_email }}' renew --preferred-chain 'ISRG Root X1' --renew-hook '/usr/sbin/nginx -s reload' >/dev/null 2>&1"
     state: present
     disabled: "{{ lego_cron_disable }}"
 
 - name: Create server private key (RSA, 4096 bits)
   become: yes
   community.crypto.openssl_privatekey:
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.key"
+    path: "{{ path_to_letsencrypt }}/certificates/server.key"
   when: certificates_dir.stat.exists
 
 - name: Create simple server self-signed certificate
   become: yes
   community.crypto.x509_certificate:
-    path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.pem"
-    privatekey_path: "{{ path_to_app_parent }}/letsencrypt/certificates/server.key"
+    path: "{{ path_to_letsencrypt }}/certificates/server.pem"
+    privatekey_path: "{{ path_to_letsencrypt }}/certificates/server.key"
     provider: selfsigned
   when: certificates_dir.stat.exists
  

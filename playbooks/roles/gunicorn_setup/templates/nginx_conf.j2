@@ -39,15 +39,23 @@ server {
     }
 
 }
-{% if use_lets_encrpt is defined and use_lets_encrpt|length %}
 server {
 
     listen 443 ssl;
     server_name {{ website_domain_name }};
     root {{ path_to_app_parent }};
 
-    ssl_certificate      bitnami/certs/{{ website_domain_name }}.crt;
-    ssl_certificate_key  bitnami/certs/{{ website_domain_name }}.key;
+    {% if use_lets_encrypt is defined and use_lets_encrypt is sameas true %}
+
+    ssl_certificate      {{ path_to_letsencrypt }}/certificates/{{ website_domain_name }}.crt;
+    ssl_certificate_key  {{ path_to_letsencrypt }}/certificates/{{ website_domain_name }}.key;
+
+    {% else %}
+
+    ssl_certificate      {{ path_to_letsencrypt }}/certificates/server.pem;
+    ssl_certificate_key  {{ path_to_letsencrypt }}/certificates/server.key;
+
+    {% endif %}
 
     location = /static/favicon.ico {
         log_not_found off;
@@ -70,6 +78,5 @@ server {
       proxy_pass http://unix:/var/run/gunicorn_{{ website_domain_name }}/{{ website_domain_name }}.sock;
     }
 }
-{% endif %}
 
 # vim: ai et ts=4 sw=4 sts=4 nu

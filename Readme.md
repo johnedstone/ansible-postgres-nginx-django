@@ -29,9 +29,11 @@ ansible-playbook 2.10.8
 ### Ansible playbooks
 For the first time 'check' and then 'play' the tags singularly, in order.
 ```
-ansible-playbook --check --tags prep-work --flush-cache -i inventory.ini playbook.yaml
-ansible-playbook --check --tags postgres --flush-cache -i inventory.ini playbook.yaml
-ansible-playbook --check --tags gunicorn-setup --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --diff --tags prep-work --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --diff --tags postgres --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --diff --tags letsencrypt --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --diff --tags gunicorn-setup --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --check --diff --tags nginx-setup --flush-cache -i inventory.ini playbook.yaml
 ```
 
 Play the `letsencrypt` tag with the variable `install_lego: true` just the first time,  
@@ -65,6 +67,12 @@ ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ```
 sudo -u postgres psql
 ```
+
+### Lets Encyrpt
+* Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
+* This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
+* To update lego, simply remove `/path/to/letsencrypt/lego` and rerun the playbook.
+
 
 ### References
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-debian-10

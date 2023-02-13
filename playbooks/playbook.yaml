@@ -11,10 +11,10 @@
       tags: [prep-work]
     - role: postgres
       tags: [postgres]
-    - role: gunicorn_setup
-      tags: [gunicorn-setup]
     - role: letsencrypt
       tags: [letsencrypt]
+    - role: gunicorn_setup
+      tags: [gunicorn-setup]
     - role: nginx_setup
       tags: [nginx-setup]
 
