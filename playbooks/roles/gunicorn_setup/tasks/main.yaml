@@ -39,8 +39,8 @@
     src: templates/systemd/gunicorn_socket.j2
     dest: "/usr/lib/systemd/system/gunicorn_{{ website_domain_name }}.socket"
   notify:
-    - "restart gunicorn service"
-    - "restart gunicorn socket"
+    - "Restart gunicorn service"
+    - "Restart gunicorn socket"
 
 - name: "create systemd gunicorn {{ website_domain_name }} service file"
   become: yes
@@ -48,8 +48,8 @@
     src: templates/systemd/gunicorn_service.j2
     dest: "/usr/lib/systemd/system/gunicorn_{{ website_domain_name }}.service"
   notify:
-    - "restart gunicorn service"
-    - "restart gunicorn socket"
+    - "Restart gunicorn service"
+    - "Restart gunicorn socket"
 
 - name: "gunicorn {{ website_domain_name }} enable & start"
   become: yes
@@ -61,8 +61,8 @@
     - "gunicorn_{{ website_domain_name }}.service"
     - "gunicorn_{{ website_domain_name }}.socket"
   notify:
-    - "restart gunicorn service"
-    - "restart gunicorn socket"
+    - "Restart gunicorn service"
+    - "Restart gunicorn socket"
   when: not ansible_check_mode
 
 # "curl --unix-socket /run/gunicorn_{{ website_domain_name }}/{{ website_domain_name}}.sock localhost"
@@ -101,6 +101,7 @@
     state: link
     src: /etc/nginx/sites-available/{{ website_domain_name }}
     dest: /etc/nginx/sites-enabled/{{ website_domain_name }}
+  when: not ansible_check_mode
 
 - name: curl nginx
   command:
