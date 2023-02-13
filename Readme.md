@@ -63,9 +63,18 @@ Lastly, then one can run this to verify all is well:
 ansible-playbook --check --flush-cache -i inventory.ini playbook.yaml
 ```
 
-### Postgres cli
+### Postgres notes
+
+#### psql (command line)
+Examples:
 ```
 sudo -u postgres psql
+psql -h localhost -U <user> -d <database> -W
+```
+
+#### Create new db, after dropping
+```
+ansible-playbook --check --diff --tags create-db-grant-perms --flush-cache -i inventory.ini playbook.yaml
 ```
 
 ### Lets Encyrpt

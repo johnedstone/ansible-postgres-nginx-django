@@ -2,6 +2,7 @@
 - name: Create a new database with name "{{ db_name }}" and specific encoding
   become_user: postgres
   become: yes
+  tags: create-db-grant-perms
   community.postgresql.postgresql_db:
     name: "{{ db_name }}"
     encoding: UTF-8
@@ -21,6 +22,7 @@
 - name: GRANT ALL PRIVILEGES ON DATABASE "{{ db_name }}" TO "{{ db_user }}"
   become_user: postgres
   become: yes
+  tags: create-db-grant-perms
   community.postgresql.postgresql_privs:
     db: "{{ db_name }}"
     privs: ALL
