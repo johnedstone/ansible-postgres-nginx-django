@@ -1,18 +1,24 @@
 ---
+# Server
 HOSTNAME: my-hostname
 FQDN: my-hostname.mydomain.com
 LOCAL_TIMEZONE: America/New_York
+
+# Database
 db_name: my_django
 db_user: my_user
 db_password: my_password
+
+# "apps" in this context, is the same as "project" in django
 path_to_app_parent: /opt/apps
 
-# Web App/Project
+# Web App (project)
 # (2x$num_cores)+1 https://docs.gunicorn.org/en/stable/design.html
 number_of_gunicorn_workers: 5
 gunicorn_app: 'hello_world:app'
 website_domain_name: my-website.com
 
+# lego and letsencrypt
 lego_cron_hour: "2"
 lego_cron_min: "10"
 lego_cron_weekday: "2"
@@ -21,7 +27,7 @@ lego_email: my_email@my_email.com
 
 use_lets_encrypt: false
 # Only need to do once, install lego
-install_lego: true
+install_lego: false
 path_to_acme_validation: /parent/path/to/acme_validation
 path_to_letsencrypt: /parent/path/to/letsencrypt
 

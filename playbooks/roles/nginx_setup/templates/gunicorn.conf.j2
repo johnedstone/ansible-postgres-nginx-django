@@ -49,8 +49,8 @@ server {
 
     listen 443 ssl;
 
-    ssl_certificate      {{ path_to_app_parent }}/letsencrypt/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}.crt{% else %}server.pem{% endif %};
-    ssl_certificate_key  {{ path_to_app_parent }}/letsencrypt/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}{% else %}server{% endif %}.key;
+    ssl_certificate      {{ path_to_letsencrypt }}/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}.crt{% else %}server.pem{% endif %};
+    ssl_certificate_key  {{ path_to_letsencrypt }}/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}{% else %}server{% endif %}.key;
 
     location = /favicon.ico {
         log_not_found off;

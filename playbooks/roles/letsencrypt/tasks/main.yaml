@@ -4,7 +4,7 @@
   file:
     state: directory
     path: "{{ path_to_letsencrypt }}"
-    mode: "0750"
+    mode: "0700"
     owner: root
     group: root
   when: install_lego

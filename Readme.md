@@ -72,7 +72,18 @@ sudo -u postgres psql
 * Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
 * This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
 * To update lego, simply remove `/path/to/letsencrypt/lego` and rerun the playbook.
+* `private_vars.yaml` allows one to use the server certs or Let's Encrypt certs
+* The Let's Encrypt certs must be manually installed the first time for each domain as described below:
 
+```
+sudo /path/to/letsencrypt/lego --path /path/to/letsencrypt --http --http.webroot /path/to/acme_validation --domains "www.xyz.net"  --email 'johndoe@johndoe.com' run --preferred-chain 'ISRG Root X1'
+
+# After certs are in place, update private_vars.yaml to 'use_lets_encrypt: yes' and 'lego_cron_disable: no' and rerun playbook
+
+ansible-playbook --check --diff --tags letsencrypt,nginx-setup,gunicorn-setup --flush-cache -i inventory.ini playbook.yaml
+
+# This will restart nginx.service. Check playbook output to confirm the certs are configured correctly
+```
 
 ### References
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-debian-10

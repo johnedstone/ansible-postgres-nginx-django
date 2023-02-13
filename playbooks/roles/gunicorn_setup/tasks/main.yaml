@@ -116,4 +116,18 @@
   changed_when: False
   when: not ansible_check_mode
 
+- name: curl nginx https
+  command:
+    cmd: "curl -k -H 'Host: {{ website_domain_name }}' https://0.0.0.0"
+    warn: false
+  register: curl_nginx_https
+  changed_when: False
+  when: not ansible_check_mode
+
+- name: debug curl nginx https
+  debug:
+    var: curl_nginx_https.stdout
+  changed_when: False
+  when: not ansible_check_mode
+
 # vim: ai et ts=2 sw=2 sts=2 nu
