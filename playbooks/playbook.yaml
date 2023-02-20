@@ -15,7 +15,6 @@
       tags: [letsencrypt]
     - role: gunicorn_setup
       tags: [gunicorn-setup]
-    - role: nginx_setup
-      tags: [nginx-setup]
+
 
 # vim: ai et ts=2 sw=2 sts=2 nu
