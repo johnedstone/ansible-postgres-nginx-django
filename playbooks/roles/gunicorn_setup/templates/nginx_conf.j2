@@ -20,6 +20,7 @@ server {
     location = /favicon.ico {
         log_not_found off;
         access_log off;
+        root {{ path_to_app_parent }}/{{ website_domain_name }}/favicon_dir;
     }
 
     location /static/ {
@@ -54,6 +55,7 @@ server {
     location = /favicon.ico {
         log_not_found off;
         access_log off;
+        root {{ path_to_app_parent }}/{{ website_domain_name }}/favicon_dir;
     }
 
     location /static/ {
