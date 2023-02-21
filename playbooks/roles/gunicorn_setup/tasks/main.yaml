@@ -1,9 +1,10 @@
 ---
-- name: set up app directory
+- name: set up app directory and favicon_dir
   become: yes
   ansible.builtin.file:
-    path: "{{ path_to_app_parent }}/{{ website_domain_name }}"
+    path: "{{ path_to_app_parent }}/{{ website_domain_name }}/favicon_dir"
     state: directory
+    recurse: true
     mode: 0775
     owner: "{{ USER }}"
     group: "{{ USER }}"
