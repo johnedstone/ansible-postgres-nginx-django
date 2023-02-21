@@ -23,7 +23,7 @@ server {
     }
 
     location /static/ {
-        root {{ path_to_app_parent }}/{{ website_domain_name }}/static;
+        root {{ path_to_app_parent }}/{{ website_domain_name }};
     }
 
     # https://docs.gunicorn.org/en/latest/deploy.html
@@ -57,7 +57,7 @@ server {
     }
 
     location /static/ {
-        root {{ path_to_app_parent }}/{{ website_domain_name }}/static;
+        root {{ path_to_app_parent }}/{{ website_domain_name }};
     }
 
     # https://docs.gunicorn.org/en/latest/deploy.html
