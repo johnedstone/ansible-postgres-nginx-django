@@ -22,15 +22,14 @@ server {
         access_log off;
     }
 
+    location /static/ {
+        root {{ path_to_app_parent }}/{{ website_domain_name }}/static;
+    }
+
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;
 
     location / {
-      # checks for static file, if not found proxy to app
-      try_files $uri @proxy_to_app;
-    }
-
-    location @proxy_to_app {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_set_header Host $http_host;
@@ -57,15 +56,14 @@ server {
         access_log off;
     }
 
+    location /static/ {
+        root {{ path_to_app_parent }}/{{ website_domain_name }}/static;
+    }
+
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;
 
     location / {
-      # checks for static file, if not found proxy to app
-      try_files $uri @proxy_to_app;
-    }
-
-    location @proxy_to_app {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_set_header Host $http_host;
