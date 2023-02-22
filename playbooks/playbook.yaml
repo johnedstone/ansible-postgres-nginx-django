@@ -16,5 +16,7 @@
     - role: gunicorn_setup
       tags: [gunicorn-setup]
 
+# When creating only a new db for
+# for an existing user, use --skip-tags db-user
 
 # vim: ai et ts=2 sw=2 sts=2 nu

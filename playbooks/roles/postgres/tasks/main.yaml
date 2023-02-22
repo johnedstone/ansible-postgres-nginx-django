@@ -18,6 +18,7 @@
     name: "{{ db_user }}"
     password: "{{ db_password }}" 
   register: db_roles
+  tags: db-user
 
 - name: GRANT ALL PRIVILEGES ON DATABASE "{{ db_name }}" TO "{{ db_user }}"
   become_user: postgres
@@ -44,10 +45,12 @@
   register: alter_msg
   when: not ansible_check_mode
   changed_when: False
+  tags: db-user
 
 - name: debug alter user connections
   debug:
     msg: "{{ alter_msg }}"
   changed_when: False
+  tags: db-user
 
 # vim: ai et ts=2 sw=2 sts=2 nu
