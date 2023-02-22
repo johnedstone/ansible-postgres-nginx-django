@@ -77,6 +77,25 @@ psql -h localhost -U <user> -d <database> -W
 ansible-playbook --check --diff --tags create-db-grant-perms --flush-cache -i inventory.ini playbook.yaml
 ```
 
+#### pg_dump and pg_restore
+
+* [reference AWS](https://docs.aws.amazon.com/dms/latest/sbs/chap-manageddatabases.postgresql-rds-postgresql-full-load-pd_dump.html)
+* [reference random](https://simplebackups.com/blog/postgresql-pgdump-and-pgrestore-guide-examples/#see-a-pg_dump-example)
+
+```
+# Dump database in sql format
+pg_dump --schema <the schema> -h localhost -U <db_user> -b -v -f filename_output_forrestore.sql -d <db_name>
+
+# Dump db in format for restore
+pg_dump --schema <the schema> -h localhost -U <db_user> -Fc -b -v -f filename_output_forrestore.sql -d <db_name>
+
+# Create database
+# Then, login to the newly created db as db user and create schema
+
+# restore
+pg_restore -v --schema <the schema> -h localhost -U <db_user>  -d <database> <name of pg_dump file from above for restore>
+```
+
 ### Lets Encyrpt
 * Ths playbook uses this approach: [Reference](https://docs.bitnami.com/general/how-to/generate-install-lets-encrypt-ssl/#alternative-approach)
 * This playbook will install lego and the cronjobs to renew the Let's Encrypt certs 
