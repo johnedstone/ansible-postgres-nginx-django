@@ -94,6 +94,12 @@ pg_dump --schema <the schema> -h localhost -U <db_user> -Fc -b -v -f filename_ou
 
 # restore
 pg_restore -v --schema <the schema> -h localhost -U <db_user>  -d <database> <name of pg_dump file from above for restore>
+
+# select tables (data, schema, all) in plain text (add -Fc for use with pg_restore, and use .custom)
+pg_dump --schema-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
+pg_dump --data-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
+pg_dump -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
+
 ```
 
 ### Lets Encyrpt
