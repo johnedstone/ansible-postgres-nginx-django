@@ -87,7 +87,7 @@ ansible-playbook --check --diff --tags create-db-grant-perms --flush-cache -i in
 pg_dump --schema <the schema> -h localhost -U <db_user> -b -v -f filename_output_forrestore.sql -d <db_name>
 
 # Dump db in format for restore
-pg_dump --schema <the schema> -h localhost -U <db_user> -Fc -b -v -f filename_output_forrestore.sql -d <db_name>
+pg_dump --schema <the schema> -h localhost -U <db_user> -Fc -b -v -f filename_output_forrestore.custom -d <db_name>
 
 # Create database
 # Then, login to the newly created db as db user and create schema
@@ -99,6 +99,9 @@ pg_restore -v --schema <the schema> -h localhost -U <db_user>  -d <database> <na
 pg_dump --schema-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
 pg_dump --data-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
 pg_dump -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
+
+# After sudo -u postgres psql and DROP DATABASE "DB_NAME";
+ansible-playbook --check --skip-tags db_user --tags postgres --diff --flush-cache -i inventory.ini playbook.yaml
 
 ```
 
