@@ -4,7 +4,7 @@
     rotate 5
     compress
     notifempty
-    "create 0660 {{ USER }} {{ USER }}"
+    create 0750 {{ USER }} {{ USER }}
     sharedscripts
     postrotate
        /usr/bin/systemctl restart gunicorn_{{ website_domain_name }}.service

@@ -24,7 +24,7 @@
   file:
     path: "/var/log/gunicorn_{{ website_domain_name }}"
     state: directory
-    mode: 0775
+    mode: 0750
     owner: "{{ USER }}"
     group: "{{ USER }}"
 
