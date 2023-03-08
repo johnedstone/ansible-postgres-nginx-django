@@ -89,20 +89,21 @@ pg_dump --schema <the schema> -h localhost -U <db_user> -b -v -f filename_output
 # Dump db in format for restore
 pg_dump --schema <the schema> -h localhost -U <db_user> -Fc -b -v -f filename_output_forrestore.custom -d <db_name>
 
-# Create database
-# Then, login to the newly created db as db user and create schema
-
-# restore
-pg_restore -v --schema <the schema> -h localhost -U <db_user>  -d <database> <name of pg_dump file from above for restore>
-
 # select tables (data, schema, all) in plain text (add -Fc for use with pg_restore, and use .custom)
 pg_dump --schema-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
 pg_dump --data-only  -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
 pg_dump -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h localhost -U user  -b -v -f finename.sql -d <db_name>
+```
 
-# After sudo -u postgres psql and DROP DATABASE "DB_NAME";
-ansible-playbook --check --skip-tags db_user --tags postgres --diff --flush-cache -i inventory.ini playbook.yaml
+#### Restoring Sequence
+```
+sudo -u postgres psql and do 'DROP DATABASE "name_of_database";
+ansible-playbook --skip-tags db_user --tags postgres --diff --flush-cache -i inventory.ini playbook.yaml
 
+### then
+pg_restore -h localhost -U username -W -d dbname  file_to_pg_dump_no_django.custom 
+### And, this skips non-django tables but creates django tables
+python manage.py migrate --fake-initial  --settings config.settings_whatever
 ```
 
 ### Lets Encyrpt
