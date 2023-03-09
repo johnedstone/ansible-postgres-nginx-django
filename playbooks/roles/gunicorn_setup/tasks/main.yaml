@@ -10,8 +10,8 @@
     group: "{{ USER }}"
 
 - name: install gunicorn hello_world
-  copy:
-    src: hello_world.py
+  template:
+    src: hello_world.py.j2
     dest: "{{ path_to_app_parent }}/{{ website_domain_name }}/hello_world.py"
 
 - name: install gunicorn
