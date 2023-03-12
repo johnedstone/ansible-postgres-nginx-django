@@ -24,7 +24,7 @@ server {
     }
 
     location /static/ {
-        root {{ path_to_app_parent }}/{{ website_domain_name }};
+        alias {{ path_to_app_parent }}/{{ website_domain_name }}/staticfiles/;
     }
 
     # https://docs.gunicorn.org/en/latest/deploy.html
@@ -43,8 +43,6 @@ server {
 }
 server {
     server_name {{ website_domain_name }};
-
-    # path for static files
     root {{ path_to_app_parent }}/{{ website_domain_name }};
 
     listen 443 ssl;
@@ -59,7 +57,7 @@ server {
     }
 
     location /static/ {
-        root {{ path_to_app_parent }}/{{ website_domain_name }};
+        alias {{ path_to_app_parent }}/{{ website_domain_name }}/staticfiles/;
     }
 
     # https://docs.gunicorn.org/en/latest/deploy.html

@@ -17,7 +17,7 @@
 - name: install gunicorn
   pip:
     name: gunicorn
-    virtualenv: "{{ path_to_app_parent }}/{{ website_domain_name }}/venv"
+    virtualenv: "{{ path_to_app_parent }}/{{ website_domain_name }}/.venv"
 
 - name: Create gunicorn logging directories
   become: yes
@@ -106,7 +106,7 @@
 
 - name: curl nginx
   command:
-    cmd: "curl -H 'Host: {{ website_domain_name }}' http://0.0.0.0"
+    cmd: "curl -I -H 'Host: {{ website_domain_name }}' http://0.0.0.0"
     warn: false
   register: curl_nginx
   changed_when: False
@@ -120,7 +120,7 @@
 
 - name: curl nginx https
   command:
-    cmd: "curl -k -H 'Host: {{ website_domain_name }}' https://0.0.0.0"
+    cmd: "curl -I -k -H 'Host: {{ website_domain_name }}' https://0.0.0.0"
     warn: false
   register: curl_nginx_https
   changed_when: False

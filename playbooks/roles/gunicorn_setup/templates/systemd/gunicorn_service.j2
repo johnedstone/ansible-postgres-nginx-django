@@ -9,7 +9,7 @@ User={{ USER }}
 Group={{ USER }}
 WorkingDirectory={{ path_to_app_parent }}/{{ website_domain_name }}
 
-ExecStart={{ path_to_app_parent }}/{{ website_domain_name }}/venv/bin/gunicorn \
+ExecStart={{ path_to_app_parent }}/{{ website_domain_name }}/.venv/bin/gunicorn \
     --access-logfile /var/log/gunicorn_{{ website_domain_name }}/access.log \
     --error-logfile /var/log/gunicorn_{{ website_domain_name }}/error.log \
           --workers {{ number_of_gunicorn_workers }} \
