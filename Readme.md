@@ -98,7 +98,7 @@ pg_dump -t 'schema."table_name"' -t 'schema."pattern"*'  --schema schema -h loca
 #### Restoring Sequence
 ```
 sudo -u postgres psql and do 'DROP DATABASE "name_of_database";
-ansible-playbook --skip-tags db_user --tags postgres --diff --flush-cache -i inventory.ini playbook.yaml
+ansible-playbook --skip-tags db-user --tags postgres --diff --flush-cache -i inventory.ini playbook.yaml
 
 ### then
 pg_restore -h localhost -U username -W -d dbname  file_to_pg_dump_no_django.custom 
