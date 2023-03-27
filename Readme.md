@@ -102,7 +102,12 @@ ansible-playbook --skip-tags db-user --tags postgres --diff --flush-cache -i inv
 
 ### then
 pg_restore -h localhost -U username -W -d dbname  file_to_pg_dump_no_django.custom 
+
+# if the schema from the restore is different than the schema for django, then change schema name
+alter schema "schema_from_restore" rename to "schema_for_current_djang0";
+
 ### And, this skips non-django tables but creates django tables
+### This may depend somewhat if django tables were in the pg_dump/pg_restore
 python manage.py migrate --fake-initial  --settings config.settings_whatever
 ```
 
