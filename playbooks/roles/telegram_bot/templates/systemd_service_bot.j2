@@ -1,0 +1,17 @@
+[Unit]
+Description={{ BOT_NAME }} daemon
+After=network.target
+
+[Service]
+Type=simple
+Environment="ENV_FILE={{ PATH_TO_PROD_ENV_FILE }}"
+User={{ USER }}
+Group={{ USER }}
+Restart=always
+
+ExecStart={{ PATH_TO_BOT_WORKING_DIR }}/.venv/bin/python {{ PATH_TO_BOT_WORKING_DIR }}/{{ BOT_SCRIPT }}
+
+[Install]
+WantedBy=multi-user.target
+
+# vim: ai et ts=4 sw=4 sts=4 nu

@@ -1,0 +1,12 @@
+/var/log/{{ BOT_NAME }}/*.log {
+    weekly
+    missingok
+    rotate 52
+    compress
+    notifempty
+    create 0640 admin admin
+    sharedscripts
+    postrotate
+       /usr/bin/systemctl restart {{ BOT_NAME }}
+endscript
+}

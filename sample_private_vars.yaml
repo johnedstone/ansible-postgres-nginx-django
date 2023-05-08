@@ -35,4 +35,10 @@ install_lego: false
 path_to_acme_validation: /path/to/parent/of/project/acme_validation
 path_to_letsencrypt: /path/to/parent/of/project/letsencrypt
 
+# Telegram bot
+BOT_NAME='bot_name'
+USER='user to run as'
+PATH_TO_BOT_WORKING_DIR='/home/path/to/working_dir'
+BOT_SCRIPT='bot_script.py'
+
 # vim: ai et ts=4 sw=4 sts=4 nu
