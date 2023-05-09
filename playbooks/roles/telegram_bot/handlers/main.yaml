@@ -1,0 +1,9 @@
+---
+- name: "Restart bot service"
+  become: yes
+  listen: "Restart bot service"
+  service:
+    name: "{{ BOT_NAME }}.service"
+    state: restarted
+    daemon_reload: yes
+  when: not ansible_check_mode

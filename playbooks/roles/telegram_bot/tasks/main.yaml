@@ -1,0 +1,35 @@
+---
+- name: Create telegram bot logging directories
+  become: yes
+  file:
+    path: "/var/log/{{ BOT_NAME }}"
+    state: directory
+    mode: 0750
+    owner: "{{ BOT_USER }}"
+    group: "{{ BOT_GROUP }}"
+
+- name: Enable bot logrotate
+  become: yes
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/{{ BOT_NAME }}"
+
+- name: "create systemd {{ BOT_NAME }} service file"
+  become: yes
+  template:
+    src: templates/systemd_servie_bot.j2
+    dest: "/usr/lib/systemd/system/{{ BOT_NAME }}.service"
+  notify:
+    - "Restart bot service"
+
+- name: "Bot {{ BOT_NAME }} enable & start"
+  become: yes
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - "{{ BOT_NAME }}.service"
+  notify:
+    - "Restart bot service"
+  when: not ansible_check_mode
