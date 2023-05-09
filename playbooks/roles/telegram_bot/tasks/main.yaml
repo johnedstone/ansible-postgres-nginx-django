@@ -17,7 +17,7 @@
 - name: "create systemd {{ BOT_NAME }} service file"
   become: yes
   template:
-    src: templates/systemd_servie_bot.j2
+    src: templates/systemd_service_bot.j2
     dest: "/usr/lib/systemd/system/{{ BOT_NAME }}.service"
   notify:
     - "Restart bot service"

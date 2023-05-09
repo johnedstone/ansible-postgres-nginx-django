@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 Environment="ENV_FILE={{ PATH_TO_PROD_ENV_FILE }}"
-User={{ USER }}
-Group={{ GROUP }}
+User={{ BOT_USER }}
+Group={{ BOT_GROUP }}
 Restart=always
 
 ExecStart={{ PATH_TO_BOT_WORKING_DIR }}/.venv/bin/python {{ PATH_TO_BOT_WORKING_DIR }}/{{ BOT_SCRIPT }}

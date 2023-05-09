@@ -4,7 +4,7 @@
     rotate 52
     compress
     notifempty
-    create 0640 {{ USER }} {{ GROUP }}
+    create 0640 {{ BOT_USER }} {{ BOT_GROUP }}
     sharedscripts
     postrotate
        /usr/bin/systemctl restart {{ BOT_NAME }}
