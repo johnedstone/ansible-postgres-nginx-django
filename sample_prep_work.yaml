@@ -1,0 +1,7 @@
+---
+# Server
+HOSTNAME: server-hostname
+FQDN: server-fqdn
+LOCAL_TIMEZONE: America/New_York
+
+# vim: ai et ts=2 sw=2 sts=2 nu

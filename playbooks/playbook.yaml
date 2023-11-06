@@ -4,17 +4,20 @@
     HOME: "{{ lookup('env', 'HOME') }}"
     USER: "{{ lookup('env', 'USER') }}"
   vars_files:
-    - "{{ HOME }}/configuration/private_vars.yaml"
+    - "{{ HOME }}/configuration/prep_work.yaml"
+    - "{{ HOME }}/configuration/postgres.yaml"
+    - "{{ HOME }}/configuration/gunicorn_setup.yaml"
+    - "{{ HOME }}/configuration/telegram_bot.yaml"
   connection: local
   roles:
     - role: prep_work
       tags: [prep-work]
     - role: postgres
       tags: [postgres]
-    - role: letsencrypt
-      tags: [letsencrypt]
     - role: gunicorn_setup
       tags: [gunicorn-setup]
+    - role: letsencrypt
+      tags: [letsencrypt]
     - role: telegram_bot
       tags: [telegram-bot]
 

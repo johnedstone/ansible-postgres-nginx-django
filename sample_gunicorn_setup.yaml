@@ -1,0 +1,30 @@
+---
+# "apps" in this context, is the same as "project" in django
+path_to_app_parent: /path/to/parent/of/project
+path_to_acme_validation: /path/to/parent/of/project/acme_validation
+path_to_letsencrypt: /path/to/parent/of/project/letsencrypt
+
+# lego and letsencrypt
+lego_cron_hour: "2"
+lego_cron_min: "10"
+lego_cron_weekday: "2"
+lego_cron_disable: false
+lego_email: email-for-lego-to-use
+
+use_lets_encrypt: false # if false, this will use server certs
+# Only need to do once, install lego
+install_lego: false
+
+# (2x$num_cores)+1 https://docs.gunicorn.org/en/stable/design.html
+number_of_gunicorn_workers: 5
+
+
+gunicorn_app: 'hello_world:app'
+# or
+#gunicorn_app: 'config.wsgi'
+hello_world_msg: 'Hello World!'
+
+# This will make a dir inside "path_to_app_parent"
+website_domain_name: website-domain-name
+
+# vim: ai et ts=2 sw=2 sts=2 nu

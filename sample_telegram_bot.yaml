@@ -1,0 +1,12 @@
+---
+# Telegram bot
+BOT_NAME: 'bot_name'
+BOT_USER: 'user to run as'
+BOT_GROUP: 'group to run as'
+PATH_TO_BOT_WORKING_DIR: '/home/path/to/working_dir'
+BOT_SCRIPT: 'bot_script.py'
+LOG_TO_FILE: 'yes'
+LOGLEVEL: 'WARNING'
+PATH_TO_PROD_ENV_FILE: 'path/to/.prod.env'
+
+# vim: ai et ts=2 sw=2 sts=2 nu
