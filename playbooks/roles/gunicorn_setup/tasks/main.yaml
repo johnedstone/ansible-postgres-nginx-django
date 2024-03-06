@@ -42,6 +42,7 @@
   notify:
     - "Restart gunicorn service"
     - "Restart gunicorn socket"
+  when: INSTALL_SYSTEMD_FILES
 
 - name: "create systemd gunicorn {{ website_domain_name }} service file"
   become: yes
@@ -51,6 +52,7 @@
   notify:
     - "Restart gunicorn service"
     - "Restart gunicorn socket"
+  when: INSTALL_SYSTEMD_FILES
 
 - name: "gunicorn {{ website_domain_name }} enable & start"
   become: yes

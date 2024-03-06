@@ -3,6 +3,7 @@
   vars:
     HOME: "{{ lookup('env', 'HOME') }}"
     USER: "{{ lookup('env', 'USER') }}"
+    INSTALL_SYSTEMD_FILES: true
   vars_files:
     #- "{{ HOME }}/configuration/prep_work.yaml"
     #- "{{ HOME }}/configuration/postgres.yaml"
