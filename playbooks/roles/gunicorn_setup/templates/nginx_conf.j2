@@ -50,6 +50,12 @@ server {
     ssl_certificate      {{ path_to_letsencrypt }}/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}.crt{% else %}server.pem{% endif %};
     ssl_certificate_key  {{ path_to_letsencrypt }}/certificates/{% if use_lets_encrypt is sameas true %}{{ website_domain_name }}{% else %}server{% endif %}.key;
 
+  {% if USE_WHITENOISE is defined and USE_WHITENOISE | bool %}
+
+    # using whitenoise, no need for staticfiles directive here
+
+  {% else %}
+
     location = /favicon.ico {
         log_not_found off;
         access_log off;
@@ -59,6 +65,8 @@ server {
     location /static/ {
         alias {{ path_to_app_parent }}/{{ website_domain_name }}/staticfiles/;
     }
+
+  {% endif %}
 
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;

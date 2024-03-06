@@ -4,10 +4,11 @@
     HOME: "{{ lookup('env', 'HOME') }}"
     USER: "{{ lookup('env', 'USER') }}"
   vars_files:
-    - "{{ HOME }}/configuration/prep_work.yaml"
-    - "{{ HOME }}/configuration/postgres.yaml"
-    - "{{ HOME }}/configuration/gunicorn_setup.yaml"
-    - "{{ HOME }}/configuration/telegram_bot.yaml"
+    #- "{{ HOME }}/configuration/prep_work.yaml"
+    #- "{{ HOME }}/configuration/postgres.yaml"
+    #- "{{ HOME }}/configuration/gunicorn_setup.yaml"
+    #- "{{ HOME }}/configuration/telegram_bot.yaml"
+    - "{{ HOME }}/configuration/status.mw.org.yaml"
   connection: local
   roles:
     - role: prep_work
