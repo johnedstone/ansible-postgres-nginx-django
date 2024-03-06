@@ -14,8 +14,11 @@ server {
 #        return 301 https://$host$request_uri;
 #    }
 
-# if we are going to let django deal with port 80, in some cases
-# then we need this, following ...
+  {% if USE_WHITENOISE is defined and USE_WHITENOISE | bool %}
+
+    # using whitenoise, no need for staticfiles directive here
+
+  {% else %}
 
     location = /favicon.ico {
         log_not_found off;
@@ -26,6 +29,8 @@ server {
     location /static/ {
         alias {{ path_to_app_parent }}/{{ website_domain_name }}/staticfiles/;
     }
+
+  {% endif %}
 
     # https://docs.gunicorn.org/en/latest/deploy.html
     keepalive_timeout 5;
