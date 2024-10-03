@@ -9,7 +9,8 @@
     #- "{{ HOME }}/configuration/postgres.yaml"
     #- "{{ HOME }}/configuration/gunicorn_setup.yaml"
     #- "{{ HOME }}/configuration/telegram_bot.yaml"
-    - "{{ HOME }}/configuration/status.mw.org.yaml"
+    #- "{{ HOME }}/configuration/status.mw.org.yaml"
+    - "{{ HOME }}/configuration/universities.yaml"
   connection: local
   roles:
     - role: prep_work
